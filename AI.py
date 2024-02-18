@@ -15,12 +15,20 @@ class AI_attendance:
         self.root.geometry("340x470+610+150")
         self.root.title("AI attendance")
 
-        img1 = Image.open(r"C:\Users\Ronish\Desktop\test project\test image\Screenshot 2024-02-11 124953.png")
-        img1 = img1.resize((200, 200))
-        self.photoimage1 = ImageTk.PhotoImage(img1)
-        lblimg1 = Label(image=self.photoimage1, bg="white")
-        lblimg1.place(x=0, y=0, width=340, height=200)
+        #img1 = Image.open(r"C:\Users\Ronish\Desktop\test project\test image\Screenshot 2024-02-11 124953.png")
+       # img1 = img1.resize((200, 200))
+        #self.photoimage1 = ImageTk.PhotoImage(img1)
+        #lblimg1 = Label(image=self.photoimage1, bg="white")
+       # lblimg1.place(x=0, y=0, width=340, height=200)
 
+        self.selected_subject = StringVar() 
+        self.subject_label = Label(root, text="Select Subject:", font=("times new roman", 15, "bold"), bg="white")
+        self.subject_label.place(x=95, y=180)
+
+        self.subject_combo = ttk.Combobox(root, textvariable=self.selected_subject, font=("times new roman", 15, "bold"), state='readonly', width=17)
+        self.subject_combo['values'] = ('AI', 'DBMS', 'OS', 'ES', 'Economics', 'OOAD')
+        self.subject_combo.place(x=75, y=210)
+        self.subject_combo.current(0)
         # Load the first button icon
         img1 = Image.open(r"C:\Users\Ronish\Desktop\test project\test image\button.png")
        
@@ -42,7 +50,7 @@ class AI_attendance:
 
     #export to csv file
     def mark_attendence(self,i,n,d):
-        with open("AI.csv","r+",newline="\n") as f:
+        with open("AI1.csv","r+",newline="\n") as f:
             myDataList=f.readlines()
             name_list=[]
             for line in myDataList:

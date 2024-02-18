@@ -25,7 +25,8 @@ class teacher_panel:
         self.subject_combo = ttk.Combobox(root, textvariable=self.selected_subject, font=("times new roman", 15, "bold"), state='readonly', width=17)
         self.subject_combo['values'] = ('AI', 'DBMS', 'OS', 'ES', 'Economics', 'OOAD')
         self.subject_combo.place(x=75, y=210)
-        self.subject_combo.current(0)  # Setting the default subject
+        self.subject_combo.current(0)
+          # Setting the default subject
         
         # Load the first button icon
         img1 = Image.open(r"C:\Users\Ronish\Desktop\test project\test image\button.png")
@@ -46,43 +47,28 @@ class teacher_panel:
         b2.place(x=70, y=330)
 
     # Create CSV file for the selected subject if it doesn't exist
-    def create_subject_csv(self, subject):
+    
+    def mark_attendance(self,i,n,d,subject):
         folder_name = "AttendanceRecords"
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
-        
         file_name = f"{folder_name}/{subject}.csv"
+        
         if not os.path.exists(file_name):
             with open(file_name, "w", newline="\n") as f:
                 writer = csv.writer(f)
-                writer.writerow(["Student_ID", "Name", "Department", "Total Present Days"])
+                writer.writerow(["Student_ID", "Name", "Department", "Time" ,"Date", "Status"])
 
-    # Check if attendance has already been marked for the current day
-    def update_attendance_once_per_day(self, i, current_date, subject):
-        folder_name = "AttendanceRecords"
-        file_name = f"{folder_name}/{subject}.csv"
-        if os.path.exists(file_name):
-            with open(file_name, "r") as f:
-                attendance_data = csv.DictReader(f)
-                for row in attendance_data:
-                    if row['Student_ID'] == i and row['Date'] == current_date:
-                        return True  # Attendance already marked for today
-        return False
-
-    # Export to CSV file
-    def mark_attendance(self,i, n, d, subject):
-        current_date = datetime.now().strftime("%d/%m/%Y")
-        
-        if self.update_attendance_once_per_day(i, current_date, subject):
-            messagebox.showinfo("Info", f"Attendance already marked for {n} today.")
-            return
-
-        folder_name = "AttendanceRecords"
-        file_name = f"{folder_name}/{subject}.csv"
-        with open(file_name, "a", newline="\n") as f:
-            writer = csv.writer(f)
-            writer.writerow([i, n, d, current_date])
-
+        with open(file_name,"r+",newline="\n") as f:
+            myDataList=f.readlines()
+            name_list=[]
+            for line in myDataList:
+                entry=line.split((","))
+                name_list.append(entry[0])
+            if ((i not in name_list) and (n not in name_list) and (d not in name_list)):
+                now=datetime.now()
+                d1=now.strftime("%d/%m/%y")
+                dtString=now.strftime("%H:%M:%S")
+                f.writelines(f"\n{i},{n},{d},{dtString},{d1},present")
+ 
     # Face recognition
     def face_recog(self):
         subject = self.selected_subject.get()  # Get the selected subject
